@@ -13,14 +13,14 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/eaTong/webpack-variable-replacer-plugin.git"
+    "url": "git+https://github.com/cjSound/webpack-plugin-css-variable.git"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/eaTong/webpack-variable-replacer-plugin/issues"
+    "url": "https://github.com/cjSound/webpack-plugin-css-variable/issues"
   },
-  "homepage": "https://github.com/eaTong/webpack-variable-replacer-plugin#readme",
-  "author": "eaTong",
+  "homepage": "https://github.com/cjSound/webpack-plugin-css-variable#readme",
+  "author": "cjSound",
   "dependencies": {
     "webpack-sources": "^2.2.0"
   }

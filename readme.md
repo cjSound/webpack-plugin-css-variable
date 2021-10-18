@@ -1,33 +1,36 @@
-## webpack-stylesheet-variable-replacer-plugin
-![在线换肤效果图](http://eatong.oss-cn-beijing.aliyuncs.com/f29b0bd6-3c90-477d-8d77-518c142cf4e9.gif)
+## webpack-plugin-css-variable
 
-easy to change css variable with only one function:`window.replaceVariable`,
-config example:
-[react-starter](https://github.com/eaTong/react-starter)
+Extract CSS variables that change dynamically through JS Function:`window.replaceVariable`,
 
 ### how to (3 steps)
 - Step1: import plugin in your webpack.config.js(don't forget to install plugin).
 
 ``` javascript
-const WebpackVariableReplacer = require('webpack-stylesheet-variable-replacer-plugin'); 
+const WebpackCssVariable = require('webpack-plugin-css-variable'); 
 ```
 
 - step:2: config your plugin: 
 
 ``` javascript
 module.exports = {
-  plugins:[
-    // ... your plugin
-    new WebpackVariableReplacer({
-      htmlFileName: 'index.html', // if your application has a html file , It's used for inject javascript file.
-      publicPath: webContextRoot, // as you need to inject javascript file , this is path prefix for visite the file for replace variable.
-      matchVariables: { // It's a key-value Object , key is only alias for your variable , such as I use 'main' for main color I use in application.
-        // notice that value is the original value in your style, not target you want to replace.
-        main: '#33ab9a',
-        mainHover: '#54b8a7',
+  publicPath: './',
+  css: {
+    // CSS Modules 模块
+    requireModuleExtension: false,
+    //提取 CSS 在开发环境模式下是默认不开启的，因为它和 CSS 热重载不兼容。 默认开发模式不开启，部署开启
+    // 当需要测试主题的时候开启，无需测试关闭
+    extract: true
+  },
+  configureWebpack: config => {
+    config.plugins.push(new WebpackCssVariable({
+      htmlFileName: 'index.html',
+      injectToEntry: true,
+      matchVariables: {
+        main: '#42b983',
+        mainHover: '#d1dd1d',
       }
-    }),
-  ]
+    }))
+  }
 }
 ```
 
@@ -36,7 +39,7 @@ module.exports = {
 - step3: call function in anywhere in your code.
 
 ``` javascript
-window.replaceStyleVariable && window.replaceStyleVariable({main: 'blue',mainHover:'red'});
+window.replaceStyleVariable({ main: '#fff', mainHover: '#999' })
 ```
 
 This step can be called any where (plugin has been injected to the html file ). The arguments need only one which is the stylesheet variable you want to replace to . Such as you want to change `main` to blue color , your argument will be : '{main:"blue"}',the key for this argument should math your config (step2).
@@ -46,12 +49,18 @@ This step can be called any where (plugin has been injected to the html file ). 
 
 - **第一步** 引入包 
 
-> const VariableReplacerPlugin =require('webpack-variable-replacer-plugin'); 
+> const configureWebpack =require('webpack-plugin-css-variable'); 
 
 - **第二步** 定义webpack plugin
 
-> new VariableReplacerPlugin({matchVariables: {main: '#456789'}})
+> new configureWebpack({matchVariables: {main: '#456789'}})
 
 - **第三步** 任何地方调用方法实现换肤
 
 > window.replaceStyleVariable({main:'#987654'})
+## 参考优化
+
+
+- **参考** [webpack-stylesheet-variable-replacer-plugin](https://github.com/eaTong/webpack-stylesheet-variable-replacer-plugin)
+
+- 优化 css 提取，将含css变量的css内容从主css抽离，**独立单独主题style**

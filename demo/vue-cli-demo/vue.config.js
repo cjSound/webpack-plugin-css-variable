@@ -2,11 +2,11 @@
  * @Author: 曹捷
  * @Date: 2021-10-14 09:39:10
  * @LastEditors: 曹捷
- * @LastEditTime: 2021-10-18 22:24:28
+ * @LastEditTime: 2021-10-18 22:52:38
  * @Description: fileContent
  */
 // vue.config.js
-const WebpackVariableReplacer = require('webpack-stylesheet-variable-replacer-plugin')
+const WebpackCssVariable = require('webpack-plugin-css-variable')
 
 module.exports = {
   publicPath: './',
@@ -18,7 +18,7 @@ module.exports = {
     extract: true
   },
   configureWebpack: config => {
-    config.plugins.push(new WebpackVariableReplacer({
+    config.plugins.push(new WebpackCssVariable({
       htmlFileName: 'index.html',
       injectToEntry: true,
       matchVariables: {
