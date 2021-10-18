@@ -1,0 +1,27 @@
+{
+  "name": "webpack-plugin-css-variable",
+  "version": "1.0.0",
+  "description": "Extract CSS variables that change dynamically through JS",
+  "main": "src/index.js",
+  "keywords": [
+    "variable",
+    "webpack",
+    "replace",
+    "plugin",
+    "css",
+    "theme"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eaTong/webpack-variable-replacer-plugin.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/eaTong/webpack-variable-replacer-plugin/issues"
+  },
+  "homepage": "https://github.com/eaTong/webpack-variable-replacer-plugin#readme",
+  "author": "eaTong",
+  "dependencies": {
+    "webpack-sources": "^2.2.0"
+  }
+}
