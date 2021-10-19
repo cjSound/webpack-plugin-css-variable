@@ -1,6 +1,6 @@
 {
   "name": "webpack-plugin-css-variable",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Extract CSS variables that change dynamically through JS",
   "main": "src/index.js",
   "keywords": [
