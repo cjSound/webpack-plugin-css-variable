@@ -32,8 +32,11 @@ const defaultOption = {
   htmlFileName: '',// tell me where the entry html file is
   buildPath: '',
   nextSupport: false, // if your server was built by next.js , nextSupport should be true
+  // 是否需要将生成后的代码注入到打包的js中，如果穿了htmlFileName，此参数可传false，否则必须为true
   injectToEntry: false,// if inject functions to all entry files
+  // 需要排除的entry文件名，支持传入正则或者正则字符串
   excludeEntry: null,
+  // 需要指定的entry文件名，支持传入正则或者正则字符串，不传默认所有
   specifyEntry: null
 };
 class VariableReplacer {
@@ -54,18 +57,23 @@ class VariableReplacer {
           if (/\.css$/.test(key)) {
             const styleAsset = assets[key];
             const extractCss = extractVariableSelection(styleAsset.source(), matchVariables)
+            if (!extractCss.beExtractedStyles) {
+              console.error('99999999999999999999999', key, styleAsset.source())
+            }
             templateString += extractCss.allExtractedVariable;
             compilation.assets[key] = {
               source: () => extractCss.beExtractedStyles,
               size: () => extractCss.beExtractedStyles.length
-            };
+            }
           }
-        });
+        })
         global.templateString = templateString;
       } else {
         templateString = global.templateString;
       }
       const { fileName, buildPath } = this.options;
+      console.log('🚀 ~ file: index.js ~ line 62 ~ Object.keys ~ templateString', templateString.length)
+
       const output = `${buildPath}${fileName}`.replace('[hash]', compilation.hash);
       const resolvedTemplateString = getScriptTemplate(matchVariables, templateString);
 
@@ -76,9 +84,10 @@ class VariableReplacer {
         };
         this.injectToHTML(compilation, resolvedTemplateString);
       }
-      if (injectToEntry || nextSupport) {
-        this.injectToEntry(compilation, resolvedTemplateString);
-      }
+      // if (injectToEntry || nextSupport) {
+      //   this.injectToEntry(compilation, resolvedTemplateString);
+      // }
+      console.log('🚀 ------------------------------------~ CSS  THEME  END~~~~~~~~~~~~~--------------------------------------',)
       callback();
     });
   }
@@ -86,8 +95,9 @@ class VariableReplacer {
   injectToHTML (compilation) {
     const { publicPath, fileName, htmlFileName } = this.options;
     const htmlAsset = compilation.getAsset(htmlFileName);
-    const htmlTemp = htmlAsset.source.source().replace(`</body>`, `<script type="text/javascript" src="${`${publicPath}${fileName}`.replace('[hash]', compilation.hash)}"></script></body>`);
+    const htmlTemp = htmlAsset.source.source().replace(`</body>`, `<script type="text/javascript" src="${`${publicPath}${fileName}`.replace('[hash]', compilation.hash)}"></script></body>`) + '';
     console.log('----------------------------------------------------\n',)
+    console.log('🚀 ~ file: index.js ~ line 90 ~ injectToHTML ~ htmlTemp', htmlTemp)
     compilation.assets[htmlFileName] = {
       source: () => htmlTemp,
       size: () => htmlTemp.length
@@ -95,6 +105,7 @@ class VariableReplacer {
   }
 
   injectToEntry (compilation, templateString) {
+    console.log('🚀 ~ file: index.js ~ line 99 ~ injectToEntry ~ injectToEntry',)
     const onlyEntryPoints = {
       entrypoints: true,
       errorDetails: false,
@@ -111,9 +122,10 @@ class VariableReplacer {
       var entryAssets = entryPoints[entryName].assets;
       entryAssets.forEach(assetName => {
         if (/\.js$/.test(assetName) && (!specifyEntry || getRegExp(specifyEntry).test(assetName)) && !(excludeEntry && getRegExp(excludeEntry).test(assetName))) {
-          const assetSource = compilation.assets[assetName];
+          const assetSource = compilation.assets[assetName]
           if (!assetSource._hasInjected) {
-            const resolvedSource = new ConcatSource(assetSource, templateString);
+            console.log('🚀 ~ file: index.js ~ line 117 ~ Object.keys ~ assetName', assetName)
+            const resolvedSource = new ConcatSource(assetSource.source(), templateString);
             resolvedSource._hasInjected = true;
             compilation.assets[assetName] = resolvedSource;
           }

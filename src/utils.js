@@ -27,7 +27,7 @@ function extractVariableSelection (styles, matchVariables) {
   }
   const variableReg = getVariablesReg(matchVariableValues);
   if (!cssExpressions || cssExpressions.length === 0) {
-    return '';
+    return reslut;
   }
   for (let idx in cssExpressions) {
     let expression = cssExpressions[idx]
@@ -45,13 +45,13 @@ function extractVariableSelection (styles, matchVariables) {
             expression = expression.replace(new RegExp(`${element};`, 'g'), '')
           })
           cssExpressions[idx] = expression
-          console.log('🚀 ~ file: utils.js ~ line 42 ~ extractVariableSelection ~ expression', expression)
+          // console.log('🚀 ~ file: utils.js ~ line 42 ~ extractVariableSelection ~ expression', expression)
         }
       }
     }
   }
   reslut.beExtractedStyles = cssExpressions.join(' ')
-  console.log('🚀 ~ file: utils.js ~ line 47 ~ extractVariableSelection ~ reslut', reslut)
+  // console.log('🚀 ~ file: utils.js ~ line 47 ~ extractVariableSelection ~ reslut', reslut)
   return reslut;
 }
 
@@ -83,7 +83,7 @@ function getScriptTemplate (matchVariables, styleStr) {
       for(var key in replaceVariables){
         option[key] = replaceVariables[key];
       }
-      var str = '${styleStr}';
+      var str = "${styleStr}";
       var style = document.getElementById(unionId);
       if (!style) {
         style = document.createElement('style');
