@@ -39,7 +39,7 @@ function extractVariableSelection (styles, matchVariables) {
         const colorRules = expression.match(combineRegs('g', '', RULE_REG, SAFE_EMPTY_REG, CSS_VALUE_REG, variableReg, SAFE_EMPTY_REG, IMPORTANT_SAFE_REG));
         if (colorRules) {
           const colorReplaceTemplates = colorRules.map(item => item.replace(variableReg, str => `DL-${valueKey[str.replace(/\s/g, '').replace(/0?\./, '.')]}`));
-          console.log('🚀 ~ file: utils.js ~ line 37 ~ extractVariableSelection ~ colorReplaceTemplates', colorReplaceTemplates)
+          // console.log('🚀 ~ file: utils.js ~ line 37 ~ extractVariableSelection ~ colorReplaceTemplates', colorReplaceTemplates)
           reslut.allExtractedVariable += `${selector}{${colorReplaceTemplates.join(';')}}`;
           colorRules.map(element => {
             expression = expression.replace(new RegExp(`${element};`, 'g'), '')

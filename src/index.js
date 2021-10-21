@@ -41,7 +41,6 @@ const defaultOption = {
 };
 class VariableReplacer {
   constructor(options) {
-    console.log('🚀 ~ file: index.js ~ line 17 ~ constructor ~ options', options)
     this.options = { ...defaultOption, ...options };
   }
 
@@ -57,9 +56,6 @@ class VariableReplacer {
           if (/\.css$/.test(key)) {
             const styleAsset = assets[key];
             const extractCss = extractVariableSelection(styleAsset.source(), matchVariables)
-            if (!extractCss.beExtractedStyles) {
-              console.error('99999999999999999999999', key, styleAsset.source())
-            }
             templateString += extractCss.allExtractedVariable;
             compilation.assets[key] = {
               source: () => extractCss.beExtractedStyles,
@@ -72,7 +68,7 @@ class VariableReplacer {
         templateString = global.templateString;
       }
       const { fileName, buildPath } = this.options;
-      console.log('🚀 ~ file: index.js ~ line 62 ~ Object.keys ~ templateString', templateString.length)
+      // console.log('🚀 ~ file: index.js ~ line 62 ~ Object.keys ~ templateString', templateString.length)
 
       const output = `${buildPath}${fileName}`.replace('[hash]', compilation.hash);
       const resolvedTemplateString = getScriptTemplate(matchVariables, templateString);
@@ -96,8 +92,6 @@ class VariableReplacer {
     const { publicPath, fileName, htmlFileName } = this.options;
     const htmlAsset = compilation.getAsset(htmlFileName);
     const htmlTemp = htmlAsset.source.source().replace(`</body>`, `<script type="text/javascript" src="${`${publicPath}${fileName}`.replace('[hash]', compilation.hash)}"></script></body>`) + '';
-    console.log('----------------------------------------------------\n',)
-    console.log('🚀 ~ file: index.js ~ line 90 ~ injectToHTML ~ htmlTemp', htmlTemp)
     compilation.assets[htmlFileName] = {
       source: () => htmlTemp,
       size: () => htmlTemp.length
@@ -105,7 +99,6 @@ class VariableReplacer {
   }
 
   injectToEntry (compilation, templateString) {
-    console.log('🚀 ~ file: index.js ~ line 99 ~ injectToEntry ~ injectToEntry',)
     const onlyEntryPoints = {
       entrypoints: true,
       errorDetails: false,
@@ -124,7 +117,6 @@ class VariableReplacer {
         if (/\.js$/.test(assetName) && (!specifyEntry || getRegExp(specifyEntry).test(assetName)) && !(excludeEntry && getRegExp(excludeEntry).test(assetName))) {
           const assetSource = compilation.assets[assetName]
           if (!assetSource._hasInjected) {
-            console.log('🚀 ~ file: index.js ~ line 117 ~ Object.keys ~ assetName', assetName)
             const resolvedSource = new ConcatSource(assetSource.source(), templateString);
             resolvedSource._hasInjected = true;
             compilation.assets[assetName] = resolvedSource;
